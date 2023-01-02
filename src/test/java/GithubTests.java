@@ -6,8 +6,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class GithubTests {
     @Test
-    void FindJunit5Examples() {
-
+    void findJunit5Examples() {
         //Open page with selenide in Github
         open("https://github.com/selenide/selenide");
         //Go to Wiki of the proj.
@@ -20,5 +19,4 @@ public class GithubTests {
         //Check that inside we have JUnit5 code examples
         $(".markdown-body").shouldHave(text("Using JUnit5 extend test class"));
     }
-
 }
