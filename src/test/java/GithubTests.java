@@ -19,4 +19,15 @@ public class GithubTests {
         //Check that inside we have JUnit5 code examples
         $(".markdown-body").shouldHave(text("Using JUnit5 extend test class"));
     }
+
+    @Test
+    void openSolutions() {
+        //Open github.com
+        open("https://github.com/");
+        //Choose Solutions -> Enterprise
+        $(byText("Solutions")).hover();
+        $(byText("Enterprise")).click();
+        //Check that header is "Build like the best"
+        $(".gutter-spacious").shouldHave(text("Build like the best"));
+    }
 }
