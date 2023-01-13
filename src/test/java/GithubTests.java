@@ -18,6 +18,8 @@ public class GithubTests {
         $("#wiki-pages-box").$(byText("SoftAssertions")).click();
         //Check that inside we have JUnit5 code examples
         $(".markdown-body").shouldHave(text("Using JUnit5 extend test class"));
+
+        System.out.println("I DID IT");
     }
 
     @Test
