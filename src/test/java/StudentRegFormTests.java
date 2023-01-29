@@ -24,7 +24,7 @@ public class StudentRegFormTests {
     String currentAddress = "Japan, Tokyo, Hokkaido prefecture";
 
 
-    File avatar = new File("src/pictures/ava.jpeg");
+    File avatar = new File("src/test/resources/pictures/ava.jpeg");
 
     @BeforeAll
     static void beforeAll() {
