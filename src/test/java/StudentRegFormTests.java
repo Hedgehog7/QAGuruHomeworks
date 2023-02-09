@@ -1,68 +1,59 @@
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.*;
 
-public class StudentRegFormTests {
+public class StudentRegFormTests extends TestBase {
+
     String firstName = "Ivan";
     String lastName = "Ivanov";
     String userEmail = "ivan@mail.ru";
     String userNumber = "9009999999";
     String gender = "Male";
+    String birthDay = "09";
+    String birthMonth = "February";
+    String birthYear = "1994";
     String birthDate = "09 February,1994";
-    String subject1 = "Biology";
-    String subject2 = "Maths";
-    String hobbies = "Reading, Music";
     String state = "NCR";
     String city = "Delhi";
-
     String currentAddress = "Japan, Tokyo, Hokkaido prefecture";
 
+    List<String> subjects = Arrays.asList("Biology", "Maths");
+    List<String> hobbies = Arrays.asList("Reading", "Music");
 
     File avatar = new File("src/test/resources/pictures/ava.jpeg");
 
-    @BeforeAll
-    static void beforeAll() {
-        Configuration.holdBrowserOpen = true;
-        Configuration.browserSize = "1980x1000";
-
-    }
-
     @Test
-    void fillRegForm() {
-        open("https://demoqa.com/automation-practice-form");
-        zoom(0.8);
+    void fillRegFormTest() {
 
-        $("#firstName").setValue(firstName);
-        $("#lastName").setValue(lastName);
-        $("#userEmail").setValue(userEmail);
-        $(byText(gender)).click();
-        $("#userNumber").setValue(userNumber);
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").selectOptionContainingText("February");
-        $(".react-datepicker__year-select").selectOptionContainingText("1994");
-        $(".react-datepicker__day--009").click();
+        registrationPage.openPage()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setUserEmail(userEmail)
+                .setGender(gender)
+                .setUserNumber(userNumber)
+                .setBirthDate(birthDay, birthMonth, birthYear)
+                .setSubjects(subjects)
+                .setHobbies(hobbies)
+                .setAvatar(avatar)
+                .setAddress(currentAddress)
+                .setState(state)
+                .setCity(city)
+                .submitForm();
 
-        $("#subjectsInput").setValue(subject1).pressEnter();
-        $("#subjectsInput").setValue(subject2).pressEnter();
-        $(byText("Reading")).click();
-        $(byText("Music")).click();
+        registrationPage.verifyTableAppears()
+                .verifyTableIsFilledCorrect("Student Name", firstName + " " + lastName)
+                .verifyTableIsFilledCorrect("Student Email", userEmail)
+                .verifyTableIsFilledCorrect("Gender", gender)
+                .verifyTableIsFilledCorrect("Mobile", userNumber)
+                .verifyTableIsFilledCorrect("Date of Birth", birthDate)
+                .verifyTableIsFilledCorrect("Subjects", subjects.get(0) + ", " + subjects.get(1))
+                .verifyTableIsFilledCorrect("Hobbies", hobbies.get(0) + ", " + hobbies.get(1))
+                .verifyTableIsFilledCorrect("Address", currentAddress)
+                .verifyTableIsFilledCorrect("Picture", avatar.getName())
+                .verifyTableIsFilledCorrect("State and City", state + " " + city);
 
-        $("#uploadPicture").uploadFile(avatar);
-        $("#currentAddress").setValue(currentAddress);
-
-        $("#react-select-3-input").setValue(state).pressEnter();
-        $("#react-select-4-input").setValue(city).pressEnter();
-
-        $("#submit").click();
-
-        $(".table-responsive").shouldHave(text(firstName + " " + lastName), text(userEmail),
-                text(gender), text(userNumber), text(birthDate), text(subject1 + ", " + subject2),
-                text(hobbies), text(currentAddress), text(state + " " + city), text("ava.jpeg"));
     }
 }
